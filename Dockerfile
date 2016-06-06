@@ -1,5 +1,9 @@
 FROM andrewpro/phantomjs:2.1.1
 
+# See https://github.com/docker-library/php/blob/81ceba13187f9488f1ab25683575ac1b62fea772/7.0/fpm/Dockerfile
+# Silence debconf's endless prattle
+ENV DEBIAN_FRONTEND noninteractive
+
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
 		autoconf \
@@ -91,8 +95,6 @@ RUN set -xe \
 	&& make clean \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
 
-COPY docker-php-ext-* /usr/local/bin/
-
 RUN set -ex \
 	&& cd /usr/local/etc \
 	&& if [ -d php-fpm.d ]; then \
@@ -129,6 +131,7 @@ RUN set -ex \
 		echo 'listen = [::]:9000'; \
 	} | tee php-fpm.d/zz-docker.conf
 
+COPY docker-php-ext-* /usr/local/bin/
 WORKDIR /www
 EXPOSE 9000
 
