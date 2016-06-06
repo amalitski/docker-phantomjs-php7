@@ -85,10 +85,14 @@ RUN set -xe \
 		--with-libedit \
 		--with-openssl \
 		--with-zlib \
+		--with-bz2 \
 		--with-pdo-mysql \
+		--with-xml \
+		--with-gd \
 		--enable-intl \
 		--with-icu-dir=/opt/icu4c \
 		--enable-opcache \
+		--enable-zip \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
